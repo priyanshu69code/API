@@ -2,3 +2,4 @@ tensorflow
 numpy
 fastapi
 python-multipart
+unicorn
