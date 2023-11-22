@@ -5,7 +5,7 @@ from pathlib import Path
 image_path = "test.jpg"
 
 # API endpoint URL
-api_url = "http://127.0.0.1:8000/predict-caption"
+api_url = "api-production-a3fa.up.railway.app/predict-caption"
 
 # Open the image file
 with open(image_path, "rb") as img_file:
