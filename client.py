@@ -6,7 +6,8 @@ image_path = "test.jpg"
 
 # API endpoint URL
 # Updated URL with "https://"
-api_url = "https://api-production-5ca0.up.railway.app/predict-caption"
+# api_url = "https://api-production-5ca0.up.railway.app/predict-caption"
+api_url = "http://127.0.0.1:8000/predict-caption"
 
 # Open the image file
 with open(image_path, "rb") as img_file:

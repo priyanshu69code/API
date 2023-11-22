@@ -9,6 +9,7 @@ from keras.preprocessing.sequence import pad_sequences
 import pickle
 from keras.applications.inception_v3 import InceptionV3
 from keras.models import Model
+from io import BytesIO
 
 app = FastAPI()
 
@@ -44,9 +45,9 @@ def preprocess(image_path):
     return x
 
 
-def encode_image(image_path):
+def encode_image(img_data):
     # Load and preprocess the image
-    img = image.load_img(image_path, target_size=(299, 299))
+    img = image.load_img(BytesIO(img_data), target_size=(299, 299))
     img_array = image.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)
     img_array = preprocess_input(img_array)
@@ -77,18 +78,10 @@ def greedySearch(photo):
 
 @app.post("/predict-caption")
 async def predict_caption(file: UploadFile = File(...)):
-    # Save the uploaded file
-    with open("temp_image.jpg", "wb") as temp_image:
-        temp_image.write(file.file.read())
-
     # Get the encoding for the new image
-    new_image_encoding = encode_image("temp_image.jpg")
+    new_image_encoding = encode_image(await file.read())
 
     # Generate caption
     predicted_caption = greedySearch(new_image_encoding.reshape((1, 2048)))
-
-    # Remove the temporary image file
-    import os
-    os.remove("temp_image.jpg")
 
     return JSONResponse(content={"predicted_caption": predicted_caption})
